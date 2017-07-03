@@ -1,5 +1,6 @@
 const express = require('express');
 const RFRoute = require('./routes/RF');
+const CloudRoute = require('./routes/Clouds');
 
 module.exports = class Api {
 
