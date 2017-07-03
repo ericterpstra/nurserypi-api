@@ -25,7 +25,7 @@ module.exports = class Api {
     // connect resource routers
     routes() {
         const rfRoute = new RFRoute();
-        const cloudRout = new CloudRoute();
+        //const cloudRout = new CloudRoute();
 
         this.express.use(rfRoute.path, rfRoute.router);
     }
