@@ -14,9 +14,6 @@ server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 
-const jobs = require('./app/jobs/jobs');
-
-jobs.startJobs();
 
 function onError(error) {
     if (error.syscall !== 'listen') throw error;
