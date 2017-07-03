@@ -19,7 +19,7 @@ initRF();
 
 module.exports = class RF {
 
-    constructor(path = '/clouds') {
+    constructor(path = '/rf') {
         this.router = express.Router();
         this.path = path;
 
