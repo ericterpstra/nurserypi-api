@@ -29,7 +29,7 @@ module.exports = class RF {
     }
     
     on(req, res) {
-        rfEmitter.sendCode(ON_2, (err, stdOut) {
+        rfEmitter.sendCode(ON_2, (err, stdOut) => {
             if(err) {
                 return res.status(500).json({message: "Cannot send ON code."});
             }
@@ -38,7 +38,7 @@ module.exports = class RF {
     }
 
     off(req, res) {
-        rfEmitter.sendCode(OFF_2, (err, stdOut) {
+        rfEmitter.sendCode(OFF_2, (err, stdOut) => {
             if(err) {
                 return res.status(500).json({message: "Cannot send OFF code."});
             }
