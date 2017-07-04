@@ -10,14 +10,15 @@ let stub = {
             }
         }
     }
+
 if (process.env.USE_RF === 'false') {
+    rpi433 = stub;
+} else {
     try {
         rpi433 = require('rpi-433');
     } catch (e) {
         rpi433 = stub;
     }
-} else {
-    rpi433 = stub;
 }
 
 let rfEmitter;
