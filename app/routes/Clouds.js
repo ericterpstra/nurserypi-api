@@ -1,7 +1,7 @@
 const express = require('express');
 const request = require('request');
 const rfEmitter = require('../lib/rfEmitter.js');
-const emitter = rfEmitter.emitter;
+const piEmitter = rfEmitter.piEmitter;
 
 const CLOUD_BIGBOY = "192.168.1.12";
 const CLOUD_SKINNY = "192.168.1.13";
@@ -52,7 +52,8 @@ class Clouds {
     }
 
     on(req, res) {
-        emitter.sendCode(rfEmitter.ON_2, (err, stdOut) => {
+        piEmitter.sendCode(rfEmitter.ON_2, (err, stdOut) => {
+            console.log('Sent: ', rfEmitter.ON_2);
             if(err) {
                 return res.status(500).json({message: "Cannot send ON code."});
             }
@@ -61,7 +62,8 @@ class Clouds {
     }
 
     off(req, res) {
-        emitter.sendCode(rfEmitter.OFF_2, (err, stdOut) => {
+        piEmitter.sendCode(rfEmitter.OFF_2, (err, stdOut) => {
+            console.log('Sent: ', rfEmitter.OFF_2);
             if(err) {
                 return res.status(500).json({message: "Cannot send OFF code."});
             }

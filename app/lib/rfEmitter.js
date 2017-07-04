@@ -7,7 +7,7 @@ try {
         emitter(a) {
             return {
                 sendCode(code, cb) {
-                    console.log('sending: ', code);
+                    console.log('sending fake: ', code);
                     return cb(false, 'testOk');
                 }
             }
@@ -22,13 +22,14 @@ const ON_2 = 9830154; // Clouds
 const OFF_2 = 9830146 // Clouds
 
 
-rfEmitter = rpi433.emitter({
-    pin: 17,
+piEmitter = rpi433.emitter({
+    pin: 0,
     pulseLength: 176  
 });
 
 module.exports = {
-    emitter: rfEmitter,
+    rpi433,
+    piEmitter,
     ON_1,
     OFF_1,
     ON_2,
