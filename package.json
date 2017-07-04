@@ -16,8 +16,8 @@
   "dependencies": {
     "dotenv": "^4.0.0",
     "express": "^4.15.3",
-    "got": "^7.1.0",
-    "lodash": "^4.17.4"
+    "lodash": "^4.17.4",
+    "request": "^2.81.0"
   },
   "devDependencies": {
     "nodemon": "^1.11.0"

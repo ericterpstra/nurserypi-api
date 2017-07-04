@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const RFRoute = require('./routes/RF');
 const CloudRoute = require('./routes/Clouds');
 
@@ -25,13 +26,14 @@ module.exports = class Api {
     // connect resource routers
     routes() {
         const rfRoute = new RFRoute();
-        //const cloudRout = new CloudRoute();
+        const cloudRoute = new CloudRoute();
 
         this.express.use(rfRoute.path, rfRoute.router);
+        this.express.use(cloudRoute.path, cloudRoute.router)
     }
 
     notfound(req, res, next) {
-        res.sendfile('public/404.html');
+        res.sendFile('404.html',{ root: path.join(__dirname, '../public') });
     }
 
 };
