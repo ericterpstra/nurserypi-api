@@ -1,9 +1,8 @@
 let rpi433;
 let stub = {
         emitter(a) {
-            console.log('emitting: ', a);
             return {
-                    sendCode(code, cb) {
+                sendCode(code, cb) {
                     console.log('sending: ', code);
                     return cb(false, 'testOk');
                 }
@@ -12,11 +11,14 @@ let stub = {
     }
 
 if (process.env.USE_RF === 'false') {
+    console.log('using rpi-433 STUB');
     rpi433 = stub;
 } else {
     try {
+        console.log('using real rpi-433');
         rpi433 = require('rpi-433');
     } catch (e) {
+        console.log('using rpi-433 STUB');
         rpi433 = stub;
     }
 }
