@@ -80,6 +80,7 @@ class Clouds {
         console.log('brightness');
         console.log(req.params);
         let cloudsIPsToChange = [];
+        let command = '';
 
         // Check for cloud param
         if( req.query.cloud && CLOUDS[req.query.cloud] ) {
@@ -90,9 +91,17 @@ class Clouds {
             cloudsIPsToChange = cloudIPs;
         }
 
+        if ( req.params.value === 'UP' || req.params.value === 'up' ) {
+            command = 'brightnessUp';
+        } else if ( req.params.value === 'UP' || req.params.value === 'up' ) {
+            command = 'brightnessDown';
+        } else {
+            command = `brightness?value=${req.params.value}`;
+        }
+
         cloudsIPsToChange.forEach( cloudIP => {
             request.post({
-                uri: `http://${cloudIP}/brightness?value=${req.params.value}`
+                uri: `http://${cloudIP}/${command}`
             });
         });
 
