@@ -3,10 +3,13 @@ const request = require('request');
 const rfEmitter = require('../lib/rfEmitter.js');
 const piEmitter = rfEmitter.piEmitter;
 
-const CLOUD_BIGBOY = "192.168.1.12";
-const CLOUD_SKINNY = "192.168.1.13";
-const CLOUD_STUBBY = "192.168.1.14";
-const CLOUDS = [CLOUD_BIGBOY, CLOUD_SKINNY, CLOUD_STUBBY];
+const CLOUDS = {
+    BIGBOY : "192.168.1.12",
+    SKINNY : "192.168.1.13",
+    STUBBY : "192.168.1.14"
+};
+const cloudNames = Object.keys(CLOUDS);
+const cloudIPs = cloudNames.map( name => CLOUDS[name] );
 
 const PATTERNS = {
     'RAINBOW' : 2,
@@ -28,14 +31,14 @@ const COLORS = {
 
 const TRI_COLOR_PALETTES = {
     'PASTEL' : [
-        {cloud: CLOUD_BIGBOY, color: COLORS.PINK},
-        {cloud: CLOUD_SKINNY, color: COLORS.PASTEL_AQUA},
-        {cloud: CLOUD_STUBBY, color: COLORS.PASTEL_YELLOW},
+        {cloud: CLOUDS.BIGBOY, color: COLORS.PINK},
+        {cloud: CLOUDS.SKINNY, color: COLORS.PASTEL_AQUA},
+        {cloud: CLOUDS.STUBBY, color: COLORS.PASTEL_YELLOW},
     ],
     'DARK' : [
-        {cloud: CLOUD_BIGBOY, color: COLORS.RED},
-        {cloud: CLOUD_SKINNY, color: COLORS.GREEN},
-        {cloud: CLOUD_STUBBY, color: COLORS.BLUE},
+        {cloud: CLOUDS.BIGBOY, color: COLORS.RED},
+        {cloud: CLOUDS.SKINNY, color: COLORS.GREEN},
+        {cloud: CLOUDS.STUBBY, color: COLORS.BLUE},
     ],
 
 }
@@ -45,10 +48,12 @@ class Clouds {
         this.router = express.Router();
         this.path = path;
 
-        this.router.get('/on', this.on);
+        this.router.get('/on', this.on); // TODO: add ?cloud param for individual on/off
         this.router.get('/off', this.off);
+        this.router.get('/brightness/:value', this.brightness);
         this.router.get('/rainbow', this.rainbow);
         this.router.get('/tricolor/:palette', this.tricolor);
+
     }
 
     on(req, res) {
@@ -71,16 +76,39 @@ class Clouds {
         });
     }
 
+    brightness(req, res) {
+        console.log('brightness');
+        console.log(req.params);
+        let cloudsIPsToChange = [];
+
+        // Check for cloud param
+        if( req.query.cloud && CLOUDS[req.query.cloud] ) {
+            console.log(req.query.cloud);
+            cloudsIPsToChange.push(CLOUDS[req.query.cloud]);
+
+        } else {
+            cloudsIPsToChange = cloudIPs;
+        }
+
+        cloudsIPsToChange.forEach( cloudIP => {
+            request.post({
+                uri: `http://${cloudIP}/brightness?value=${req.params.value}`
+            });
+        });
+
+        return res.status(200).json({brightness: req.params.value});
+
+    }
+
     rainbow(req, res) {
-        CLOUDS.forEach((cloud) => {
+        cloudIPs.forEach((cloud) => {
             request.post({
                 uri: `http://${cloud}/pattern?value=3`
-            })
+            });
         });
     }
 
     tricolor(req, res) {
-        console.log('params: ', req.params);  
         let chosenPalette;
         if (!req.params || !req.params.palette || !TRI_COLOR_PALETTES[req.params.palette]) {
             chosenPalette = 'DARK';
